@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "pkg": "^5.5.1"
+  },
+  "bin": {
+    "hello": "lib/hello.js"
+  },
+  "scripts": {
+    "pkg": "pkg lib/index.js --out-path build/"
+  }
+}
