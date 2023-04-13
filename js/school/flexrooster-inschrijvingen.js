@@ -14,13 +14,13 @@ function generateRandomChoices() {
   let indexes = choices.map((_, i) => i);
 
   for (let iter = 0; iter < LESSON_COUNT_ONE_SEGMENT; iter++) {
-    const index = indexes[Math.floor(Math.random() * indexes.length * 1.2)];
+    const index = indexes[Math.floor(Math.random() * indexes.length * 0.8)];
     choices[index] = LIKE;
     indexes = indexes.filter(x => x !== index);
   }
 
   for (let iter = 0; iter < LESSON_COUNT_ONE_SEGMENT; iter++) {
-    const index = indexes[Math.floor(Math.random() * indexes.length * 0.9)];
+    const index = indexes[Math.floor(Math.random() * indexes.length)];
     choices[index] = DISLIKE;
     indexes = indexes.filter(x => x !== index);
   }
