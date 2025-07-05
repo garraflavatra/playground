@@ -1,4 +1,5 @@
 from base64 import b64encode
+from uuid import uuid4
 import http.client
 import json
 
@@ -37,6 +38,7 @@ def parse_rdw_boolean(input: str):
 
 count = -1
 offset = 0
+boundary = 'batch_' + uuid4().hex
 
 http.client.HTTPSConnection.default_port = 443
 rdw = http.client.HTTPSConnection('opendata.rdw.nl')
@@ -55,13 +57,14 @@ try:
         vehicles = json.loads(res.read().decode('utf-8'))
         count = len(vehicles)
         offset += count
+        mapped_vehicles = []
 
         for v in vehicles:
             license_plate_number = v['kenteken']
             if not license_plate_number:
                 continue
 
-            mapped_vehicle = {
+            mapped_vehicles.append({
                 'LicensePlateNumber': license_plate_number,
                 'Type': parse_rdw_string(v.get('voertuigsoort')),
                 'TradeName': parse_rdw_string(v.get('handelsbenaming')),
@@ -87,25 +90,40 @@ try:
                 'IsExported': parse_rdw_boolean(v.get('export_indicator')),
                 'IsRecalled': parse_rdw_boolean(v.get('openstaande_terugroepactie_indicator')),
                 'IsTaxi': parse_rdw_boolean(v.get('taxi_indicator')),
-            }
-
-            json_data = json.dumps(mapped_vehicle)
-            fm.request('POST', '/fmi/odata/v4/RDW_OData/Cars', json_data, {
-                'Accept': 'application/json',
-                'Authorization': auth_header,
-                'Content-Length': len(json_data),
-                'Content-Type': 'application/json',
-                'OData-Version': '4.0',
-                'OData-MaxVersion': '4.0',
-                'Prefer': 'return=minimal',
-                'User-Agent': 'filemaker_rdw_odata.py',
             })
 
-            res = fm.getresponse()
-            res.read()
-            if res.status > 299:
-                print('Error: ', res.status, res.reason)
-                break
+        batch_body = ''
+
+        for i, v in enumerate(mapped_vehicles):
+            json_data = json.dumps(v)
+            batch_body += f'--{boundary}\r\n'
+            batch_body += 'Content-Type: application/http\r\n'
+            batch_body += 'Content-Transfer-Encoding: binary\r\n'
+            batch_body += f'Content-ID: {i + 1}\r\n\r\n'
+            batch_body += 'POST https://fms22ets.openc.nl/fmi/odata/v4/RDW_OData/Cars HTTP/1.1\r\n'
+            batch_body += 'Content-Type: application/json\r\n'
+            batch_body += f'Content-Length: {len(json_data)}\r\n\r\n'
+            batch_body += json_data
+            batch_body += '\r\n'
+            if i == count-1:
+                batch_body += f'--{boundary}--'
+
+        fm.request('POST', '/fmi/odata/v4/RDW_OData/Cars/$batch', batch_body, {
+            'Authorization': auth_header,
+            'Content-Length': len(batch_body),
+            'Content-Type': 'multipart/mixed; boundary=' + boundary,
+            'OData-Version': '4.0',
+            'OData-MaxVersion': '4.0',
+            'Prefer': 'return=minimal',
+            'User-Agent': 'filemaker_rdw_odata_batch.py',
+        })
+
+        res = fm.getresponse()
+        res.read()
+
+        if res.status > 299:
+            print('Error: ', res.status, res.reason)
+            break
 
 finally:
     fm.close()
