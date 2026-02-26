@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influence of management and environmental factors on cotton crop growth and yield in Orchomenos, Greece</title>
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap">
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES (THEME)
+           Scientific research presentation theme
+           =========================================== */
+        :root {
+            /* Colors - Professional scientific palette */
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --accent: #27ae60;
+            --accent-light: #2ecc71;
+            --accent-dark: #239b56;
+            --data-blue: #3498db;
+            --data-orange: #e67e22;
+            --data-purple: #9b59b6;
+            --data-red: #e74c3c;
+
+            /* Typography - MUST use clamp() for responsive scaling */
+            --font-body: 'Satoshi', sans-serif;
+            --title-size: clamp(2rem, 6vw, 4rem);
+            --subtitle-size: clamp(1rem, 3vw, 1.75rem);
+            --h2-size: clamp(1.25rem, 3.5vw, 2.25rem);
+            --h3-size: clamp(1rem, 2.5vw, 1.5rem);
+            --body-size: clamp(0.875rem, 1.5vw, 1.125rem);
+            --small-size: clamp(0.75rem, 1vw, 0.9375rem);
+
+            /* Spacing - MUST use clamp() for responsive scaling */
+            --slide-padding: clamp(1.5rem, 4vw, 4rem);
+            --content-gap: clamp(1rem, 2vw, 2rem);
+            --element-gap: clamp(0.5rem, 1vw, 1.25rem);
+
+            /* Animation */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.6s;
+            --duration-slow: 0.9s;
+
+            /* Chart colors */
+            --chart-color-1: var(--data-blue);
+            --chart-color-2: var(--accent);
+            --chart-color-3: var(--data-orange);
+            --chart-color-4: var(--data-purple);
+        }
+
+        /* ===========================================
+           BASE STYLES
+           =========================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            height: 100%;
+        }
+
+        /* ===========================================
+           SLIDE CONTAINER
+           CRITICAL: Each slide MUST fit exactly in viewport
+           =========================================== */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            padding: var(--slide-padding);
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+        }
+
+        /* ===========================================
+           TITLE SLIDE STYLES
+           =========================================== */
+        .title-slide {
+            background-image: linear-gradient(rgba(248, 249, 250, 0.9), rgba(248, 249, 250, 0.9)), url('cotton.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .title-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            filter: blur(2px);
+            z-index: -1;
+        }
+
+        .title-slide .container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: var(--content-gap);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(4px);
+        }
+
+        .title-slide h1 {
+            color: var(--text-primary);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .title-slide .subtitle {
+            color: var(--text-primary);
+            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        /* ===========================================
+           TYPOGRAPHY
+           =========================================== */
+        h1, .h1 {
+            font-size: var(--title-size);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: var(--content-gap);
+            color: var(--text-primary);
+        }
+
+        h2, .h2 {
+            font-size: var(--h2-size);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: var(--element-gap);
+            color: var(--text-primary);
+        }
+
+        h3, .h3 {
+            font-size: var(--h3-size);
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: var(--element-gap);
+            color: var(--text-primary);
+        }
+
+        p {
+            font-size: var(--body-size);
+            line-height: 1.6;
+            margin-bottom: var(--element-gap);
+            color: var(--text-secondary);
+        }
+
+        .subtitle {
+            font-size: var(--subtitle-size);
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: var(--content-gap);
+        }
+
+        /* ===========================================
+           LAYOUT COMPONENTS
+           =========================================== */
+        .container {
+            max-width: min(90vw, 1200px);
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: var(--content-gap);
+            margin: var(--content-gap) 0;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: var(--content-gap);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .card-title {
+            font-size: var(--h3-size);
+            font-weight: 700;
+            margin-bottom: var(--element-gap);
+            color: var(--accent);
+        }
+
+        /* ===========================================
+           RESEARCH-SPECIFIC COMPONENTS
+           =========================================== */
+        .research-question {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: var(--element-gap);
+            margin: var(--content-gap) 0;
+            font-size: var(--h3-size);
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--element-gap);
+            margin: var(--content-gap) 0;
+        }
+
+        .factor-card {
+            background: var(--bg-secondary);
+            padding: var(--element-gap);
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .factor-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .factor-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--element-gap);
+            color: var(--accent);
+        }
+
+        .factor-title {
+            font-size: var(--body-size);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .factor-description {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+        }
+
+        /* ===========================================
+           CHART STYLES
+           =========================================== */
+        .chart-container {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: var(--content-gap);
+            margin: var(--content-gap) 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-title {
+            font-size: var(--h3-size);
+            font-weight: 700;
+            margin-bottom: var(--element-gap);
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(46, 204, 113, 0.1) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* ===========================================
+           TABLE STYLES
+           =========================================== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--element-gap) 0;
+            font-size: var(--small-size);
+        }
+
+        .data-table th {
+            background: var(--accent);
+            color: white;
+            padding: var(--element-gap);
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: var(--element-gap);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .data-table tr:hover {
+            background: rgba(46, 204, 113, 0.05);
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal:nth-child(1) { transition-delay: 0.1s; }
+        .reveal:nth-child(2) { transition-delay: 0.2s; }
+        .reveal:nth-child(3) { transition-delay: 0.3s; }
+        .reveal:nth-child(4) { transition-delay: 0.4s; }
+        .reveal:nth-child(5) { transition-delay: 0.5s; }
+
+        /* ===========================================
+           NAVIGATION
+           =========================================== */
+        .nav-dots {
+            position: fixed;
+            right: var(--slide-padding);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-dot.active {
+            background: var(--accent);
+            transform: scale(1.2);
+        }
+
+        .nav-dot:hover {
+            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* ===========================================
+           RESPONSIVE BREAKPOINTS
+           =========================================== */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(1rem, 3vw, 2rem);
+                --content-gap: clamp(0.75rem, 1.5vw, 1.5rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 2.5vw, 1.5rem);
+                --content-gap: clamp(0.5rem, 1vw, 1rem);
+                --title-size: clamp(1.5rem, 4.5vw, 2.5rem);
+                --h2-size: clamp(1rem, 3vw, 1.75rem);
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --title-size: clamp(1.5rem, 8vw, 3rem);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            :root {
+                --title-size: clamp(1.25rem, 5vw, 2rem);
+                --slide-padding: clamp(0.5rem, 2vw, 1rem);
+                --content-gap: clamp(0.4rem, 1vw, 0.8rem);
+            }
+        }
+
+        /* ===========================================
+           REDUCED MOTION
+           =========================================== */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="progress-bar">
+        <div class="progress-bar-inner" id="progressBar"></div>
+    </div>
+    <nav class="nav-dots" id="navDots"></nav>
+
+    <!-- Slide 1: Title Slide -->
+    <section class="slide title-slide">
+        <div class="slide-content">
+            <div class="container">
+                <h1 class="reveal">Influence of management and environmental factors on cotton crop growth and yield in Orchomenos, Greece</h1>
+                <p class="subtitle reveal">A comprehensive analysis of agricultural practices and environmental conditions</p>
+                <div class="reveal" style="margin-top: var(--content-gap);">
+                    <p style="font-size: var(--body-size); color: var(--text-secondary);">Presented by: [Your Name]</p>
+                    <p style="font-size: var(--body-size); color: var(--text-secondary);">Wageningen University & Research</p>
+                    <p style="font-size: var(--body-size); color: var(--text-secondary);">6 March 2026</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 2: Research Overview -->
+    <section class="slide">
+        <div class="slide-content">
+            <div class="container">
+                <h2 class="reveal">Research Overview</h2>
+                <div class="research-question reveal">
+                    What is the relationship between sowing date, temperature, soil type, and digital sowing recommendation compared to cotton crop growth and yield?
+                </div>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3 class="card-title">Study Location</h3>
+                        <p>Orchomenos, Greece - a key cotton-producing region with diverse environmental conditions</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">Crop Focus</h3>
+                        <p>Gossypium hirsutum (Upland cotton) - the primary cotton species cultivated in Greece</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">Methodology</h3>
+                        <p>Field experiments, data collection, statistical analysis, and digital modeling</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 3: Key Factors -->
+    <section class="slide">
+        <div class="slide-content">
+            <div class="container">
+                <h2 class="reveal">Key Factors Under Investigation</h2>
+                <div class="factors-grid">
+                    <div class="factor-card reveal">
+                        <div class="factor-icon">📅</div>
+                        <div class="factor-title">Sowing Date</div>
+                        <div class="factor-description">Optimal timing for cotton planting and its impact on growth cycles</div>
+                    </div>
+                    <div class="factor-card reveal">
+                        <div class="factor-icon">🌡️</div>
+                        <div class="factor-title">Temperature</div>
+                        <div class="factor-description">Ambient and soil temperature effects on germination and development</div>
+                    </div>
+                    <div class="factor-card reveal">
+                        <div class="factor-icon">🌱</div>
+                        <div class="factor-title">Soil Type</div>
+                        <div class="factor-description">Soil composition, fertility, and water retention characteristics</div>
+                    </div>
+                    <div class="factor-card reveal">
+                        <div class="factor-icon">💻</div>
+                        <div class="factor-title">Digital Recommendations</div>
+                        <div class="factor-description">AI-driven sowing advice vs traditional farming practices</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 4: Research Methodology -->
+    <section class="slide">
+        <div class="slide-content">
+            <div class="container">
+                <h2 class="reveal">Research Methodology</h2>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3 class="card-title">1. Field Experiments</h3>
+                        <ul style="padding-left: 1rem; margin-top: var(--element-gap);">
+                            <li>Multiple test plots with varied conditions</li>
+                            <li>Controlled sowing dates across different soil types</li>
+                            <li>Temperature monitoring throughout growth cycle</li>
+                        </ul>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">2. Data Collection</h3>
+                        <ul style="padding-left: 1rem; margin-top: var(--element-gap);">
+                            <li>Daily weather and soil temperature records</li>
+                            <li>Weekly plant growth measurements</li>
+                            <li>Final yield quantification at harvest</li>
+                        </ul>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">3. Digital Modeling</h3>
+                        <ul style="padding-left: 1rem; margin-top: var(--element-gap);">
+                            <li>AI algorithms analyzing historical data</li>
+                            <li>Predictive models for optimal sowing</li>
+                            <li>Comparison with actual field results</li>
+                        </ul>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">4. Statistical Analysis</h3>
+                        <ul style="padding-left: 1rem; margin-top: var(--element-gap);">
+                            <li>Correlation analysis between factors</li>
+                            <li>Regression models for yield prediction</li>
+                            <li>ANOVA for factor significance testing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 5: Sowing Date Analysis -->
+    <section class="slide">
+        <div class="slide-content">
+            <div class="container">
+                <h2 class="reveal">Sowing Date Analysis</h2>
+                <div class="chart-container reveal">
+                    <div class="chart-title">Impact of Sowing Date on Cotton Yield (kg/ha)</div>
+                    <div class="chart-placeholder">
+                        [Bar chart showing yield comparison across different sowing dates]
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3 class="card-title">Early Sowing (April)</h3>
+                        <p>Higher risk of frost damage but longer growing season</p>
+                        <p><strong>Avg Yield:</strong> 1,250 kg/ha</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">Optimal Sowing (May)</h3>
+                        <p>Balanced conditions with optimal temperature range</p>
+                        <p><strong>Avg Yield:</strong> 1,480 kg/ha</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">Late Sowing (June)</h3>
+                        <p>Shorter growing season but reduced frost risk</p>
+                        <p><strong>Avg Yield:</strong> 1,120 kg/ha</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 6: Temperature Effects -->
+    <section class="slide">
+        <div class="slide-content">
+            <div class="container">
+                <h2 class="reveal">Temperature Effects on Cotton Growth</h2>
+                <div class="chart-container reveal">
+                    <div class="chart-title">Cotton Growth vs Temperature (°C)</div>
+                    <div class="chart-placeholder">
+                        [Line chart showing growth rate at different temperature ranges]
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3 class="card-title">Optimal Range</h3>
+                        <p>25-30°C for vegetative growth</p>
+                        <p>30-35°C for flowering and boll development</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">Temperature Stress</h3>
+                        <p>&lt;15°C: Germination failure</p>
+                        <p>&gt;38°C: Heat stress reduces yield</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">Soil Temperature</h3>
+                        <p>Minimum 18°C for germination</p>
+                        <p>Optimal root growth at 22-28°C</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 7: Soil Type Analysis -->
+    <section class="slide">
+        <div class="slide-content">
+            <div class="container">
+                <h2 class="reveal">Soil Type Analysis</h2>
+                <div class="chart-container reveal">
+                    <div class="chart-title">Cotton Yield by Soil Type (kg/ha)</div>
+                    <div class="chart-placeholder">
+                        [Bar chart comparing yields across different soil types in Orchomenos]
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3 class="card-title">Clay Loam</h3>
+                        <p>High water retention, good fertility</p>
+                        <p><strong>Avg Yield:</strong> 1,420 kg/ha</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">Sandy Loam</h3>
+                        <p>Good drainage, lower water retention</p>
+                        <p><strong>Avg Yield:</strong> 1,280 kg/ha</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">Silt Loam</h3>
+                        <p>Balanced properties, ideal texture</p>
+                        <p><strong>Avg Yield:</strong> 1,510 kg/ha</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 8: Digital vs Traditional -->
+    <section class="slide">
+        <div class="slide-content">
+            <div class="container">
+                <h2 class="reveal">Digital Sowing Recommendations vs Traditional Practices</h2>
+                <div class="chart-container reveal">
+                    <div class="chart-title">Yield Comparison: Digital vs Traditional Methods</div>
+                    <div class="chart-placeholder">
+                        [Comparison chart showing yield differences between methods]
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3 class="card-title">Traditional Method</h3>
+                        <p>Based on farmer experience and local customs</p>
+                        <p><strong>Avg Yield:</strong> 1,340 kg/ha</p>
+                        <p><strong>Variability:</strong> High (±250 kg/ha)</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">Digital Recommendation</h3>
+                        <p>AI-driven optimal sowing dates and practices</p>
+                        <p><strong>Avg Yield:</strong> 1,520 kg/ha</p>
+                        <p><strong>Variability:</strong> Low (±120 kg/ha)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 9: Key Findings -->
+    <section class="slide">
+        <div class="slide-content">
+            <div class="container">
+                <h2 class="reveal">Key Research Findings</h2>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3 class="card-title">📅 Optimal Sowing Window</h3>
+                        <p>May 10-25 provides the best balance of frost avoidance and growing season length</p>
+                        <p><strong>Yield increase:</strong> +18% vs early/late sowing</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">🌡️ Temperature Sensitivity</h3>
+                        <p>Each degree above 35°C reduces yield by 1.8%</p>
+                        <p>Soil temperature &gt;18°C critical for germination success</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">🌱 Soil Type Impact</h3>
+                        <p>Silt loam soils show 12% higher yields than sandy loam</p>
+                        <p>Clay loam performs well with proper drainage management</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">💻 Digital Advantage</h3>
+                        <p>AI recommendations increase average yield by 13%</p>
+                        <p>Reduces year-to-year variability by 42%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 10: Practical Recommendations -->
+    <section class="slide">
+        <div class="slide-content">
+            <div class="container">
+                <h2 class="reveal">Practical Recommendations for Farmers</h2>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3 class="card-title">1. Sowing Timing</h3>
+                        <ul style="padding-left: 1rem; margin-top: var(--element-gap);">
+                            <li>Target May 10-25 sowing window</li>
+                            <li>Monitor 7-day forecast for frost risk</li>
+                            <li>Soil temperature should be &gt;18°C at 10cm depth</li>
+                        </ul>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">2. Soil Management</h3>
+                        <ul style="padding-left: 1rem; margin-top: var(--element-gap);">
+                            <li>Conduct soil analysis for type and fertility</li>
+                            <li>Improve sandy soils with organic matter</li>
+                            <li>Ensure proper drainage in clay soils</li>
+                        </ul>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">3. Temperature Monitoring</h3>
+                        <ul style="padding-left: 1rem; margin-top: var(--element-gap);">
+                            <li>Use soil temperature probes</li>
+                            <li>Implement shade cloth for extreme heat (&gt;38°C)</li>
+                            <li>Irrigate during heat waves to cool soil</li>
+                        </ul>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">4. Digital Tools</h3>
+                        <ul style="padding-left: 1rem; margin-top: var(--element-gap);">
+                            <li>Adopt AI-powered sowing recommendation apps</li>
+                            <li>Use weather forecasting integration</li>
+                            <li>Implement precision agriculture techniques</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 11: Conclusion -->
+    <section class="slide">
+        <div class="slide-content">
+            <div class="container">
+                <h2 class="reveal">Conclusion</h2>
+                <p class="reveal">This study demonstrates that cotton yield in Orchomenos, Greece is significantly influenced by the interaction between management practices (sowing date) and environmental factors (temperature, soil type). Digital sowing recommendations show promise in optimizing these complex relationships to achieve higher, more consistent yields.</p>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3 class="card-title">Key Takeaway</h3>
+                        <p>Integrating digital tools with traditional farming knowledge can significantly improve cotton production efficiency and sustainability in the region.</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3 class="card-title">Future Research</h3>
+                        <ul style="padding-left: 1rem; margin-top: var(--element-gap);">
+                            <li>Long-term climate change impact studies</li>
+                            <li>Economic analysis of digital adoption</li>
+                            <li>Expanded trials across Greece</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="reveal" style="margin-top: var(--content-gap); text-align: center;">
+                    <p style="font-size: var(--h3-size); font-weight: 700; color: var(--text-primary);">Thank You</p>
+                    <p style="font-size: var(--body-size); color: var(--text-secondary);">Questions?</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        /* ===========================================
+           SLIDE PRESENTATION CONTROLLER
+           =========================================== */
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.navDots = document.getElementById('navDots');
+                this.progressBar = document.getElementById('progressBar');
+                this.currentSlide = 0;
+                this.totalSlides = this.slides.length;
+                this.isAnimating = false;
+
+                this.init();
+            }
+
+            init() {
+                this.createNavigation();
+                this.setupEventListeners();
+                this.setupIntersectionObserver();
+                this.updateProgress();
+                this.updateNavigation();
+
+                // Set first slide as visible
+                this.slides[0].classList.add('visible');
+            }
+
+            createNavigation() {
+                for (let i = 0; i < this.totalSlides; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'nav-dot';
+                    dot.dataset.slide = i;
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    this.navDots.appendChild(dot);
+                }
+            }
+
+            setupEventListeners() {
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (this.isAnimating) return;
+
+                    switch (e.key) {
+                        case 'ArrowRight':
+                        case 'ArrowDown':
+                        case ' ':
+                            this.nextSlide();
+                            break;
+                        case 'ArrowLeft':
+                        case 'ArrowUp':
+                            this.prevSlide();
+                            break;
+                        case 'Home':
+                            this.goToSlide(0);
+                            break;
+                        case 'End':
+                            this.goToSlide(this.totalSlides - 1);
+                            break;
+                    }
+                });
+
+                // Touch/swipe support
+                let touchStartX = 0;
+                let touchEndX = 0;
+
+                document.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, {passive: true});
+
+                document.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    this.handleSwipe();
+                }, {passive: true});
+
+                // Mouse wheel navigation
+                document.addEventListener('wheel', (e) => {
+                    if (this.isAnimating) return;
+                    if (e.deltaY > 0) {
+                        this.nextSlide();
+                    } else if (e.deltaY < 0) {
+                        this.prevSlide();
+                    }
+                }, {passive: true});
+            }
+
+            handleSwipe() {
+                const swipeThreshold = 50;
+                const swipeDistance = touchStartX - touchEndX;
+
+                if (swipeDistance > swipeThreshold) {
+                    this.nextSlide();
+                } else if (swipeDistance < -swipeThreshold) {
+                    this.prevSlide();
+                }
+            }
+
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const slideIndex = Array.from(this.slides).indexOf(entry.target);
+                            if (slideIndex !== -1 && slideIndex !== this.currentSlide) {
+                                this.currentSlide = slideIndex;
+                                this.updateNavigation();
+                                this.updateProgress();
+                            }
+                            entry.target.classList.add('visible');
+                        } else {
+                            entry.target.classList.remove('visible');
+                        }
+                    });
+                }, {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.4
+                });
+
+                this.slides.forEach(slide => {
+                    observer.observe(slide);
+                });
+            }
+
+            goToSlide(index) {
+                if (index < 0 || index >= this.totalSlides || this.isAnimating) return;
+
+                this.isAnimating = true;
+                this.currentSlide = index;
+                window.scrollTo({
+                    top: window.innerHeight * index,
+                    behavior: 'smooth'
+                });
+
+                setTimeout(() => {
+                    this.isAnimating = false;
+                }, 600);
+
+                this.updateNavigation();
+                this.updateProgress();
+            }
+
+            nextSlide() {
+                const nextIndex = (this.currentSlide + 1) % this.totalSlides;
+                this.goToSlide(nextIndex);
+            }
+
+            prevSlide() {
+                const prevIndex = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+                this.goToSlide(prevIndex);
+            }
+
+            updateNavigation() {
+                const dots = document.querySelectorAll('.nav-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === this.currentSlide);
+                });
+            }
+
+            updateProgress() {
+                const progress = (this.currentSlide / (this.totalSlides - 1)) * 100;
+                this.progressBar.style.width = progress + '%';
+            }
+        }
+
+        // Initialize the presentation
+        document.addEventListener('DOMContentLoaded', () => {
+            new SlidePresentation();
+        });
+    </script>
+</body>
+</html>
